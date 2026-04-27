@@ -1,0 +1,7 @@
+pandas
+numpy
+holidays
+torch
+lightning
+pytorch-forecasting
+tensorboard

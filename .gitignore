@@ -1,0 +1,16 @@
+# PyTorch & Lightning logs
+lightning_logs/
+*.ckpt
+
+# Data & Results
+atm_cash_forecast/data/
+atm_cash_forecast/results/
+*.pkl
+*.csv
+
+# Python
+__pycache__/
+*.pyc
+.env
+venv/
+ai_venv/
