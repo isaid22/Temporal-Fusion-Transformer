@@ -1,0 +1,25 @@
+# Data parameters
+n_atms: 100
+start_date: '2022-01-01'
+end_date: '2024-12-31'
+holdout_start_date: '2025-01-01'
+holdout_end_date: '2025-02-28'
+history_days: 90
+forecast_days: 35
+
+# Model parameters
+hidden_dim: 256
+num_heads: 8
+dropout: 0.1
+embedding_dim: 32
+statistical_feature_dim: 50
+
+# Training parameters
+batch_size: 128
+learning_rate: 0.001
+epochs: 20
+early_stopping_patience: 10
+
+# Paths
+data_path: 'data/'
+model_save_path: 'data/models/'

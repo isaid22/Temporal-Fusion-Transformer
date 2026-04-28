@@ -5,3 +5,4 @@ torch
 lightning
 pytorch-forecasting
 tensorboard
+PyYAML

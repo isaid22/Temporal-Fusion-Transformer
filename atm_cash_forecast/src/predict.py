@@ -3,9 +3,12 @@ import sys
 import glob
 import pandas as pd
 import matplotlib.pyplot as plt
-from pytorch_forecasting import TemporalFusionTransformer
 
+# Add parent directory to path to allow importing local modules
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+from pytorch_forecasting import TemporalFusionTransformer
+from src.evaluate import evaluate_forecasts
 from config import config
 
 def run_inference():
@@ -60,9 +63,12 @@ def run_inference():
     # 4. Run Predictions
     print(f"Generating predictions for {config.forecast_days} days into Q1 2025...")
     # Using mode="raw" returns the exact dictionary format that plot_prediction() requires
-    predictions = tft.predict(predict_df, mode="raw", return_x=True)
+    predictions = tft.predict(predict_df, mode="raw", return_x=True, return_y=True, return_index=True)
     
-    # 5. Visualize Results against Ground Truth
+    # 5. Global Evaluation
+    evaluate_forecasts(predictions)
+    
+    # 6. Visualize Results against Ground Truth
     os.makedirs("results", exist_ok=True)
     print("\nPlotting probabilistic forecasts...")
     

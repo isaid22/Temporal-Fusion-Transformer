@@ -112,11 +112,11 @@ def train_tft():
     # Checkpoint callback: save the best model weights dynamically
     checkpoint_callback = ModelCheckpoint(
         dirpath=config.model_save_path,
-        filename="tft-{epoch:02d}-{val_loss:.2f}",
+        filename="tft_epoch-{epoch:02d}_val-loss-{val_loss:.2f}",
         monitor="val_loss",
         mode="min",
         save_top_k=3,
-        auto_insert_metric_name=True,
+        auto_insert_metric_name=False,  # This prevents the annoying '=' signs
     )
     
     # Set up TensorBoard
