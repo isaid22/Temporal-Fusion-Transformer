@@ -4,5 +4,8 @@ holidays
 torch
 lightning
 pytorch-forecasting
+ray[tune]
+matplotlib
+tqdm
 tensorboard
 PyYAML
