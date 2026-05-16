@@ -4,20 +4,19 @@ start_date: '2022-01-01'
 end_date: '2024-12-31'
 holdout_start_date: '2025-01-01'
 holdout_end_date: '2025-02-28'
-history_days: 90
+history_days: 30
 forecast_days: 35
 
 # Model parameters
-hidden_dim: 256
-num_heads: 8
-dropout: 0.1
+hidden_dim: 32
+num_heads: 4
+dropout: 0.345
 embedding_dim: 32
-statistical_feature_dim: 50
 
 # Training parameters
-batch_size: 128
+batch_size: 64
 learning_rate: 0.001
-epochs: 20
+epochs: 5
 early_stopping_patience: 10
 
 # Paths

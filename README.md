@@ -5,6 +5,12 @@ This is a repo for multiple examples of time series problems using Temporal Fusi
 
 This project demonstrates an end-to-end framework for forecasting multi-horizon daily cash demand across a simulated network of 100 ATMs distributed across 4 major US cities. By leveraging the Temporal Fusion Transformer (TFT), the model identifies complex time-varying relationships (like payday cycles and holiday spikes) alongside static infrastructure covariates (like ATM location).
 
+## Documentation Index
+
+- [README.md](README.md): Main project overview, training, inference, and evaluation workflow.
+- [atm_cash_forecast/README_TUNING.md](atm_cash_forecast/README_TUNING.md): Hyperparameter tuning instructions, search-space config usage, and results locations.
+- [atm_cash_forecast/data/data-reference.md](atm_cash_forecast/data/data-reference.md): Data dictionary and field-level reference notes.
+
 ### 🏗️ Model Structure
 
 This implementation uses the **Temporal Fusion Transformer (TFT)** architecture via the `pytorch-forecasting` library. The network uses multi-head attention to select relevant historical patterns, while independently handling:
@@ -73,25 +79,40 @@ When training concludes, your optimized `.ckpt` model files can be found in:
 atm_cash_forecast/data/models/
 ```
 
-### 🔮 Inference on Hold-Out Data
+### 🔮 Inference & Evaluation
 
-Once a model is successfully trained, use the prediction script to test its capabilities against completely unseen future data (Q1 2025). 
+Once a model is successfully trained, use the prediction script to test its capabilities against completely unseen future data (Q1 2025).
 
 ```bash
 python atm_cash_forecast/src/predict.py
 ```
 
-**What the inference script does:**
-1. Automatically scans `data/models/` and selects the most recently created `.ckpt` file (the peak model from your last run).
-2. Extracts the last `history_days` (e.g., 90 days) from the `train_features.csv` to use as the model's required historical context.
-3. Automatically stitches that context to the initial `forecast_days` (e.g., 35 days) of the `holdout_features.csv` ground-truth target data.
-4. Generates the probabilistic forecasts (the central median line + 7 surrounding Quantiles forming confidence bands).
-5. Outputs highly detailed line charts plotting your specific confidence boundaries overlaid directly against what technically happened in 2025.
+The script automatically loads your absolute best `.ckpt` model, extracts the necessary 90-day historical context, and generates a fully probabilistic 35-day forecast. All outputs are saved to `atm_cash_forecast/results/`.
 
-You can find the visually generated prediction outputs saved for 3 unique ATMs inside:
-```text
-atm_cash_forecast/results/
-```
+#### 1. Visual Forecast Plots (`forecast_atm_*.png`)
+These plots visually overlay the model's forecasting confidence against the actual ground-truth data.
+
+*   **The Grey Line (Actuals):** Represents the true historical data (past) and the actual ground truth of the holdout period (future).
+*   **The Solid Orange Line (Median):** The model's 50th quantile (its primary point-forecast).
+*   **The Orange Shaded Bands (Confidence Intervals):**
+    *   **Darkest Orange:** The 25th–75th quantile band (50% confidence).
+    *   **Medium Orange:** The 10th–90th quantile band (80% confidence).
+    *   **Lightest Faint Orange:** The 2nd–98th quantile absolute extremes. If the grey line spikes outside this faint cloud, a severe anomaly occurred that broke the model's highest boundaries.
+    *   *Interpretation:* A narrow orange band means the model is highly confident. A wide orange band means the model recognizes high uncertainty (e.g., holidays/weekends).
+*   **The Bottom Grey Line (Attention):** Found spanning the past (negative X-axis), this shows exactly which historical days the Multi-Head Attention mechanism found most useful to generate the future prediction (e.g., spikes indicating weekly seasonality).
+
+#### 2. Aggregated Metrics (`holdout_evaluation_metrics.json`)
+Evaluates the **50th Quantile (Median)** prediction against the actual ground truth across all 100 ATMs. *(Note: The unit of measurement is 'number of bills', not dollar amounts)*.
+
+*   **MAE (Mean Absolute Error):** On average, how many bills the forecast was off by per day.
+*   **RMSE (Root Mean Squared Error):** Penalizes larger errors more heavily. Useful to gauge if the model has severe misses.
+*   **sMAPE (Symmetric Mean Absolute Percentage Error):** The percentage error. sMAPE is used instead of standard MAPE because daily cash demand can sometimes drop near zero, which would cause division-by-zero crashes.
+
+#### 3. Raw Probabilistic Data (`raw_predictions.csv`)
+Because the TFT outputs a full probability distribution, you get every single measurement day-by-day and ATM-by-ATM in a flat CSV.
+
+*   **Columns:** `atm_id`, `time_idx`, `actual_bills`, `absolute_error`, and all 7 predicted quantiles (`predicted_q0.02` ... `predicted_q0.98`).
+*   **Business Use Case:** Instead of stocking the exact median amount (`predicted_q0.50`), ATM operators can simply pull the `predicted_q0.90` (the 90th percentile) column to ensure the machine has enough cash 90% of the time, safely mathematically preventing stock-outs without guessing!
 
 
 

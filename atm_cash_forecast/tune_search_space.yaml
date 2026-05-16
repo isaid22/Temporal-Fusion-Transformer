@@ -1,0 +1,63 @@
+num_samples: 20
+resources_per_trial:
+  cpu: 4
+  gpu: 1
+
+# Remove any parameter block below to stop searching it.
+# Add new parameter blocks using one of the supported distributions:
+# - type: choice with values
+# - type: uniform with lower/upper
+# - type: loguniform with lower/upper
+# - type: randint with lower/upper
+#
+# Parameter names can be:
+# - dataloader keys: batch_size, val_batch_size_factor, num_workers, pin_memory
+# - Trainer kwargs: e.g. gradient_clip_val, precision
+# - TemporalFusionTransformer.from_dataset kwargs: e.g. hidden_size, dropout,
+#   attention_head_size, hidden_continuous_size, learning_rate, log_interval
+#
+# Backward-compatible aliases are supported:
+# hidden_dim -> hidden_size
+# embedding_dim -> hidden_continuous_size
+# num_heads -> attention_head_size
+
+search_space:
+  batch_size:
+    type: choice
+    values: [64, 128, 256]
+
+  learning_rate:
+    type: loguniform
+    lower: 0.0001
+    upper: 0.01
+
+  hidden_dim:
+    type: choice
+    values: [32, 64, 128]
+
+  embedding_dim:
+    type: choice
+    values: [8, 16, 32]
+
+  num_heads:
+    type: choice
+    values: [2, 4, 8]
+
+  dropout:
+    type: uniform
+    lower: 0.1
+    upper: 0.4
+
+  # Example additional parameter searches:
+  # gradient_clip_val:
+  #   type: uniform
+  #   lower: 0.01
+  #   upper: 1.0
+
+  # num_workers:
+  #   type: choice
+  #   values: [2, 4]
+
+  # val_batch_size_factor:
+  #   type: choice
+  #   values: [2, 3]

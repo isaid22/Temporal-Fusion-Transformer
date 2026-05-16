@@ -3,6 +3,7 @@ import sys
 import glob
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 # Add parent directory to path to allow importing local modules
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
@@ -77,6 +78,16 @@ def run_inference():
         # TFT's plot_prediction automatically draws the context, actuals (y), and 7 predicted quantiles
         fig, ax = plt.subplots(figsize=(12, 6))
         tft.plot_prediction(predictions.x, predictions.output, idx=idx, add_loss_to_title=True, ax=ax)
+        
+        # Custom legend
+        legend_patches = [
+            mpatches.Patch(color='grey', label='Historical Data'),
+            mpatches.Patch(color='blue', label='Actuals'),
+            mpatches.Patch(color='orange', label='Median Forecast'),
+            mpatches.Patch(color='red', alpha=0.3, label='95% Confidence Interval'),
+            mpatches.Patch(color='red', alpha=0.5, label='80% Confidence Interval')
+        ]
+        ax.legend(handles=legend_patches)
         
         atm_id = predict_df['atm_id'].unique()[idx]
         # Combine our custom title with the auto-generated loss metrics and add padding

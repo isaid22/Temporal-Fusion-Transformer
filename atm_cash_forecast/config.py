@@ -20,7 +20,6 @@ class Config:
     num_heads: int
     dropout: float
     embedding_dim: int
-    statistical_feature_dim: int
     
     # Training parameters
     batch_size: int
