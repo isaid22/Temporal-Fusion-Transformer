@@ -9,6 +9,7 @@ This project demonstrates an end-to-end framework for forecasting multi-horizon 
 
 - [README.md](README.md): Main project overview, training, inference, and evaluation workflow.
 - [atm_cash_forecast/README_TUNING.md](atm_cash_forecast/README_TUNING.md): Hyperparameter tuning instructions, search-space config usage, and results locations.
+- [atm_cash_forecast/README_TENSORBOARD.md](atm_cash_forecast/README_TENSORBOARD.md): TensorBoard usage for both training logs and Ray Tune results.
 - [atm_cash_forecast/data/data-reference.md](atm_cash_forecast/data/data-reference.md): Data dictionary and field-level reference notes.
 
 ### 🏗️ Model Structure
