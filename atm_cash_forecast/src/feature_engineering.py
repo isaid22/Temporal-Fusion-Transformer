@@ -34,7 +34,7 @@ def add_time_features(df: pd.DataFrame) -> pd.DataFrame:
     df_unique_dates = pd.DataFrame({'snapshot_date': df['snapshot_date'].unique()}).sort_values('snapshot_date')
     
     # Create a DataFrame of just the holiday dates
-    holidays_df = pd.DataFrame({'holiday_date': pd.to_datetime([d for d in us_holidays.keys()])}).sort_values('holiday_date')
+    holidays_df = pd.DataFrame({'holiday_date': pd.to_datetime([d for d in us_holidays.keys()]).astype(df_unique_dates['snapshot_date'].dtype)}).sort_values('holiday_date')
     
     # Merge to find the next future holiday
     merged_next = pd.merge_asof(df_unique_dates, holidays_df, left_on='snapshot_date', right_on='holiday_date', direction='forward')

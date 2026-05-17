@@ -24,7 +24,7 @@ resources_per_trial:
 search_space:
   batch_size:
     type: choice
-    values: [64, 128, 256]
+    values: [64, 128, 256, 512]
 
   learning_rate:
     type: loguniform
@@ -49,15 +49,11 @@ search_space:
     upper: 0.4
 
   # Example additional parameter searches:
-  # gradient_clip_val:
-  #   type: uniform
-  #   lower: 0.01
-  #   upper: 1.0
+  gradient_clip_val:
+    type: uniform
+    lower: 0.01
+    upper: 1.0
 
-  # num_workers:
-  #   type: choice
-  #   values: [2, 4]
-
-  # val_batch_size_factor:
-  #   type: choice
-  #   values: [2, 3]
+  val_batch_size_factor:
+     type: choice
+     values: [2, 3]

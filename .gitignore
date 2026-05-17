@@ -1,16 +1,47 @@
-# PyTorch & Lightning logs
-lightning_logs/
-*.ckpt
+# OS/editor noise
+.DS_Store
+Thumbs.db
 
-# Data & Results
-atm_cash_forecast/data/
-atm_cash_forecast/results/
-*.pkl
-*.csv
-
-# Python
+# Python caches
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments and local env files
 .env
+.env.*
+.venv/
 venv/
 ai_venv/
+
+# Packaging/build outputs
+build/
+dist/
+*.egg-info/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Model/training artifacts
+*.ckpt
+/lightning_logs/
+/ray_results/
+/results/
+/atm_cash_forecast/lightning_logs/
+/atm_cash_forecast/ray_results/
+/atm_cash_forecast/results/
+
+# Generated data/model artifacts for ATM project
+/data/
+/atm_cash_forecast/data/models/
+/atm_cash_forecast/data/train_features.csv
+/atm_cash_forecast/data/*.pkl
+
+# Local smoke-test tuning config
+/atm_cash_forecast/tune_smoke.yaml
